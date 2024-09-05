@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #333;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        .request,
+        .response {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .request {
+            border-left: 4px solid #007bff;
+        }
+
+        .response {
+            border-left: 4px solid #28a745;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>API Documentation</h1>
+
+    <h2>Overview</h2>
+    <p>This API provides endpoints for user authentication and city information retrieval. The authentication is handled
+        using JWT tokens, and the API includes both public and protected routes.</p>
+
+    <h2>Endpoints</h2>
+
+    <h3>Public Endpoints</h3>
+
+    <h4>POST <code>/login</code></h4>
+    <p><strong>Description:</strong> Authenticates a user and returns a JWT token.</p>
+
+    <h5>Request Body:</h5>
+    <pre class="request">
+{
+  "username": "string",
+  "password": "string"
+}
+    </pre>
+
+    <h5>Response:</h5>
+    <ul>
+        <li><strong>200 OK</strong>
+            <pre class="response">
+{
+  "token": "string"
+}
+            </pre>
+        </li>
+        <li><strong>400 Bad Request</strong>
+            <pre class="response">
+{
+  "error": "Invalid request body"
+}
+            </pre>
+        </li>
+        <li><strong>403 Forbidden</strong>
+            <pre class="response">
+{
+  "error": "Invalid credentials"
+}
+            </pre>
+        </li>
+        <li><strong>500 Internal Server Error</strong>
+            <pre class="response">
+{
+  "error": "Error generating token"
+}
+            </pre>
+        </li>
+    </ul>
+
+    <h5>Example Request:</h5>
+    <pre class="request">
+POST /login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password"
+}
+    </pre>
+
+    <h5>Example Response:</h5>
+    <pre class="response">
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIn0.2YIVINc7t2zF0wGQeS1UZPjWeXQ4Oo2T6ZbzpE8S4DoU"
+}
+    </pre>
+
+    <h3>Protected Endpoints</h3>
+
+    <h4>GET <code>/api/cities</code></h4>
+    <p><strong>Description:</strong> Returns a list of all cities.</p>
+
+    <h5>Response:</h5>
+    <ul>
+        <li><strong>200 OK</strong>
+            <pre class="response">
+[
+  {
+    "name": "string",
+    "country": "string",
+    "population": integer,
+    "latitude": float,
+    "longitude": float,
+    "language": "string"
+  },
+  ...
+]
+            </pre>
+        </li>
+        <li><strong>401 Unauthorized</strong>
+            <pre class="response">
+{
+  "error": "Authorization header missing" or "Invalid token"
+}
+            </pre>
+        </li>
+    </ul>
+
+    <h5>Example Request:</h5>
+    <pre class="request">
+GET /api/cities
+Authorization: &lt;token&gt;
+    </pre>
+
+    <h5>Example Response:</h5>
+    <pre class="response">
+[
+  {
+    "name": "Tunis",
+    "country": "Tunisia",
+    "population": 1200000,
+    "latitude": 36.8065,
+    "longitude": 10.1815,
+    "language": "Arabic"
+  },
+  ...
+]
+    </pre>
+
+    <h4>GET <code>/api/cities/{city}</code></h4>
+    <p><strong>Description:</strong> Returns information about a specific city.</p>
+
+    <h5>Parameters:</h5>
+    <ul>
+        <li><strong>city</strong> (Path parameter): The name of the city to retrieve.</li>
+    </ul>
+
+    <h5>Response:</h5>
+    <ul>
+        <li><strong>200 OK</strong>
+            <pre class="response">
+{
+  "name": "string",
+  "country": "string",
+  "population": integer,
+  "latitude": float,
+  "longitude": float,
+  "language": "string"
+}
+            </pre>
+        </li>
+        <li><strong>401 Unauthorized</strong>
+            <pre class="response">
+{
+  "error": "Authorization header missing" or "Invalid token"
+}
+            </pre>
+        </li>
+        <li><strong>404 Not Found</strong>
+            <pre class="response">
+{
+  "error": "City not found"
+}
+            </pre>
+        </li>
+    </ul>
+
+    <h5>Example Request:</h5>
+    <pre class="request">
+GET /api/cities/Tunis
+Authorization: Bearer &lt;token&gt;
+    </pre>
+
+    <h5>Example Response:</h5>
+    <pre class="response">
+{
+  "name": "Tunis",
+  "country": "Tunisia",
+  "population": 1200000,
+  "latitude": 36.8065,
+  "longitude": 10.1815,
+  "language": "Arabic"
+}
+    </pre>
+
+
+
+</body>
+
+</html>
